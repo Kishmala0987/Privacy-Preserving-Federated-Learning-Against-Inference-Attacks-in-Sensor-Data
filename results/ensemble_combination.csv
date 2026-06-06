@@ -1,0 +1,5 @@
+defense,n_groups,activity_acc,attack_acc,attack_acc_lr,attack_acc_rf,attack_acc_mlp,privacy_gain_vs_random,ensemble_gain,group_sizes,group_activity_accs,rounds,seed
+subject_aware_delta,1,89.2433,28.5714,28.5714,4.7619,4.7619,6.0,0.0,[21],[89.24],15,42
+subject_aware_delta,2,88.2932,40.625,40.625,15.625,15.625,8.5312,3.6138,"[11, 10]","[81.13, 88.23]",15,42
+subject_aware_delta,3,85.2392,50.0,50.0,22.2222,27.7778,10.5,12.804,"[7, 7, 7]","[70.95, 72.31, 74.04]",15,42
+subject_aware_delta,5,80.285,44.4444,44.4444,44.4444,33.3333,9.3333,9.1551,"[5, 4, 4, 4, 4]","[83.61, 61.42, 74.79, 74.41, 61.42]",15,42

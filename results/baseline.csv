@@ -1,0 +1,6 @@
+defense,activity_acc,attack_acc,rounds,noise_scale,noise_multiplier,alpha,seed,privacy_gain,privacy_gain_vs_random
+none,87.7842,97.619,20,2.0,1.0,0.5,42,0.0,29.2857
+feature,74.4825,94.4444,20,2.0,1.0,0.5,42,3.1746,28.3333
+subject_aware,23.5154,73.0159,20,2.0,1.0,0.5,42,24.6031,21.9048
+dp,26.6712,3.1746,20,2.0,1.0,0.5,42,94.4444,0.9524
+subject_aware_delta,87.1734,54.7619,20,2.0,1.0,0.5,42,42.8571,16.4286
