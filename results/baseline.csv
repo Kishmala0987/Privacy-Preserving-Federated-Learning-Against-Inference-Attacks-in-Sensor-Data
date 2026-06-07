@@ -1,6 +1,6 @@
-defense,activity_acc,attack_acc,rounds,noise_scale,noise_multiplier,alpha,seed,privacy_gain,privacy_gain_vs_random
-none,87.7842,97.619,20,2.0,1.0,0.5,42,0.0,29.2857
-feature,74.4825,94.4444,20,2.0,1.0,0.5,42,3.1746,28.3333
-subject_aware,23.5154,73.0159,20,2.0,1.0,0.5,42,24.6031,21.9048
-dp,26.6712,3.1746,20,2.0,1.0,0.5,42,94.4444,0.9524
-subject_aware_delta,87.1734,54.7619,20,2.0,1.0,0.5,42,42.8571,16.4286
+defense,activity_acc,attack_acc,attack_acc_lr,attack_acc_rf,attack_acc_mlp,privacy_gain,privacy_gain_vs_random,rounds,noise_scale,noise_multiplier,alpha,seed
+none,87.7842,99.2063,99.2063,99.2063,86.5079,0.0,29.7619,20,2.0,0.05,0.5,42
+feature,74.4825,97.619,97.619,96.8254,84.9206,1.5873,29.2857,20,2.0,0.05,0.5,42
+subject_aware,23.5154,86.5079,84.127,86.5079,59.5238,12.6984,25.9524,20,2.0,0.05,0.5,42
+dp,85.0356,16.6667,16.6667,7.9365,3.9683,82.5396,5.0,20,2.0,0.05,0.5,42
+subject_aware_delta,87.0716,72.2222,72.2222,25.3968,3.9683,26.9841,21.6667,20,2.0,0.05,0.5,42
