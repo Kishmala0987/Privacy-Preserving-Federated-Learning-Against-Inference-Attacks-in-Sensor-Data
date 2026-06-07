@@ -50,11 +50,12 @@ def _build_classifiers():
     Called fresh each time so experiments don't share state.
     """
     return {
+        # multi_class removed in sklearn 1.6; lbfgs handles multinomial by default
         'lr': LogisticRegression(
             max_iter    = 1000,
             random_state= 42,
-            multi_class = "multinomial",
             C           = 1.0,
+            solver      = 'lbfgs',
         ),
         'rf': RandomForestClassifier(
             n_estimators= 200,

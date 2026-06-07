@@ -265,15 +265,22 @@ def run_ensemble_experiment(config):
             # ── Activate subject_aware_delta dims for this group ──
             if (defense_type == 'subject_aware_delta'
                     and rnd == warmup_rounds + 1
-                    and sensitive_delta_dims_per_group[g_idx] is None
-                    and len(warmup_deltas[g_idx]) > 5):
-                sensitive_delta_dims_per_group[g_idx] = find_sensitive_delta_dimensions(
-                    warmup_deltas[g_idx],
-                    warmup_subject_ids[g_idx],
-                    top_k=config.get('sensitive_top_k', 50),
-                )
-                for c in group:
-                    c.sensitive_delta_dims = sensitive_delta_dims_per_group[g_idx]
+                    and sensitive_delta_dims_per_group[g_idx] is None):
+                n_unique = len(set(warmup_subject_ids[g_idx]))
+                # Each group has n_clients/K subjects. Require at least
+                # half the group's subjects to be seen before computing dims.
+                min_subj = max(3, len(group) // 2)
+                if len(warmup_deltas[g_idx]) > 5 and n_unique >= min_subj:
+                    sensitive_delta_dims_per_group[g_idx] = find_sensitive_delta_dimensions(
+                        warmup_deltas[g_idx],
+                        warmup_subject_ids[g_idx],
+                        top_k=config.get('sensitive_top_k', 50),
+                    )
+                    for c in group:
+                        c.sensitive_delta_dims = sensitive_delta_dims_per_group[g_idx]
+                    print(f'  [SAD group {g_idx}] dims computed ({n_unique} subjects seen)')
+                else:
+                    print(f'  [SAD group {g_idx}] warmup insufficient ({n_unique} subjects) — extending')
 
             # ── Participation: sample clients within this group ───
             num_in_group  = len(group)
@@ -354,6 +361,12 @@ def run_ensemble_experiment(config):
     print(f"  [ensemble] Mean group acc     : {np.mean(group_final_accs):.2f}%")
     print(f"  [ensemble] Ensemble gain      : {ensemble_gain:+.2f}pp")
     print(f"  [ensemble] Worst attack acc   : {final_attack_acc:.2f}%")
+    # NOTE on ensemble privacy: two competing forces are at play.
+    # (1) Attacker sees fewer deltas per group → less training data → harder.
+    # (2) Each group has fewer subjects → simpler classification problem → easier.
+    # In practice (2) dominates when K is large, so ensemble alone may NOT
+    # improve privacy. This is an empirical finding worth reporting.
+    # Combine with subject_aware_delta to get genuine privacy improvement.
 
     return {
         'final_activity_acc'     : ensemble_final,

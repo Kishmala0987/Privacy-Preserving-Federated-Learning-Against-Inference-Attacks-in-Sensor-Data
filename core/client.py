@@ -136,7 +136,10 @@ class FederatedClient:
                     delta,
                     sensitive_dims       = self.sensitive_delta_dims,
                     base_noise           = 0.01,
-                    sensitive_multiplier = max(1.0, noise_scale),
+                    # noise_scale is used directly as sensitive_multiplier.
+                    # Meaningful range is 1–50; below 1.0 adds less noise
+                    # than base_noise which is not useful.
+                    sensitive_multiplier = max(0.1, noise_scale),
                 )
             else:
                 # Warmup phase: light uniform noise on all delta dimensions

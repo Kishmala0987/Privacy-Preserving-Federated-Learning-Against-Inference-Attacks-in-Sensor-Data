@@ -189,14 +189,25 @@ def run_one_experiment(config):
         # This guarantees every client in this round gets the sensitive dims.
         if (defense_type == 'subject_aware_delta'
                 and rnd == warmup_rounds + 1
-                and sensitive_delta_dims is None
-                and len(warmup_deltas) > 10):
-            sensitive_delta_dims = find_sensitive_delta_dimensions(
-                warmup_deltas, warmup_subject_ids,
-                top_k=config.get('sensitive_top_k', 50)
-            )
-            for c in clients:
-                c.sensitive_delta_dims = sensitive_delta_dims
+                and sensitive_delta_dims is None):
+            n_unique_seen = len(set(warmup_subject_ids))
+            # Need at least 10 unique subjects to get a meaningful
+            # between-subject variance estimate for sensitive dims.
+            # If warmup didn't cover enough subjects (can happen with
+            # low participation rate), extend warmup by 1 round.
+            min_subjects = config.get('min_subjects_for_dims', 10)
+            if len(warmup_deltas) > 10 and n_unique_seen >= min_subjects:
+                sensitive_delta_dims = find_sensitive_delta_dimensions(
+                    warmup_deltas, warmup_subject_ids,
+                    top_k=config.get('sensitive_top_k', 50)
+                )
+                for c in clients:
+                    c.sensitive_delta_dims = sensitive_delta_dims
+                print(f'  [SAD] Sensitive dims computed at round {rnd} '
+                      f'({n_unique_seen} subjects seen in warmup)')
+            else:
+                print(f'  [SAD] Warmup insufficient ({n_unique_seen} subjects, '
+                      f'{len(warmup_deltas)} deltas) — extending warmup 1 round')
 
         deltas       = []
         client_sizes = []
