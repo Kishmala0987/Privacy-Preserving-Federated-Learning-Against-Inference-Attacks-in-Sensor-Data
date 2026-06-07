@@ -30,11 +30,11 @@ The expected folder structure inside is the standard UCI-HAR layout with `train/
 
 30 people wear fitness trackers. Their phones train a shared model locally — raw data never leaves. The server collects only model weight updates (deltas). An honest-but-curious server runs three classifiers (Logistic Regression, Random Forest, MLP) on those deltas to re-identify which person sent which update. We report worst-case accuracy across all three classifiers.
 
-Random guessing on 30 people = **3.3% accuracy**. Without any defense, the attack reaches **97.6%**. That is the problem this project solves.
+Random guessing on 30 people = **3.3% accuracy**. Without any defense, the attack reaches ** 100%**.
 
 ### The novel contribution: Subject-Aware Delta Defense
 
-Standard differential privacy adds noise uniformly to all delta dimensions. Our defense first identifies *which specific weight dimensions vary most between subjects* (using between-group variance analysis during a warmup phase), then adds proportionally more noise to exactly those dimensions. This preserves the activity-classification signal while masking the identity signal.
+Standard differential privacy adds noise uniformly to all delta dimensions. This defense first identifies *which specific weight dimensions vary most between subjects* (using between-group variance analysis during a warmup phase), then adds proportionally more noise to exactly those dimensions. This preserves the activity-classification signal while masking the identity signal.
 
 Result: **87.2% activity accuracy** with **54.8% attack accuracy** — the best privacy-utility tradeoff of all five defenses tested, at the default noise setting.
 
@@ -92,7 +92,7 @@ Runs all defenses across 3 seeds to check variance. Saves to `experiments/result
 python experiments/run_seeds.py
 ```
 
-**Known issue:** `subject_aware_delta` shows higher variance than other defenses (observed range: 17.8%–35.6% attack accuracy across 3 seeds). This is caused by random client participation in warmup rounds not always covering all 30 subjects before sensitive dimensions are computed. The `min_subjects_for_dims=10` guard in `fl_runner.py` mitigates this but does not eliminate it entirely. Use `--seeds 5` for more stable estimates.
+**Known issue:** `subject_aware_delta` shows higher variance than other defenses (observed range: 17.8%–35.6% attack accuracy across 3 seeds). This is caused by random client participation in warmup rounds not always covering all 30 subjects before sensitive dimensions are computed. The `min_subjects_for_dims=10` guard in `fl_runner.py` mitigates this but does not eliminate it entirely.
 
 **Expected runtime:** ~30 minutes on CPU.
 
