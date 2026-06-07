@@ -8,8 +8,10 @@ What it sweeps:
   feature/subject_aware → noise_scale values
   dp                    → noise_multiplier values
   subject_aware_delta   → sensitive_multiplier passed via noise_scale;
-                          client.py uses noise_scale as sensitive_multiplier
-                          for this defense so the sweep is live
+                          client.py uses noise_scale as sensitive_multiplier.
+                          Range must be >= 1.0 (values below 1.0 all produce
+                          the same effect due to base_noise=0.01 floor).
+                          Sweep: [1, 2, 5, 10, 20, 50]
 
 Each row in CSV = one (defense, noise_value) combination.
 Use this CSV to plot the privacy-utility tradeoff curve later.
@@ -33,7 +35,10 @@ SWEEP = {
     'feature'             : [0.1, 0.5, 1.0, 2.0, 3.0, 5.0],
     'subject_aware'       : [0.1, 0.5, 1.0, 2.0, 3.0, 5.0],
     'dp'                  : [0.01, 0.05, 0.1, 0.3, 0.5, 1.0, 2.0],
-    'subject_aware_delta' : [0.01, 0.05, 0.1, 0.5, 1.0, 2.0],
+    # sensitive_multiplier range: must be >= 1.0 to add meaningful extra noise
+    # on sensitive dims. Values below 1.0 all collapse to the same effect
+    # due to the base_noise=0.01 floor. Sweep covers low→high multiplier.
+    'subject_aware_delta' : [1, 2, 5, 10, 20, 50],
 }
 
 

@@ -93,6 +93,16 @@ def row_from_result(result, extra):
 # ─────────────────────────────────────────
 
 def run_k_sweep(args):
+    """
+    K sweep with no defense.
+
+    Expected finding: as K increases, attack accuracy may INCREASE
+    (not decrease) because each group has fewer subjects, making
+    the attacker's classification problem easier despite having
+    fewer training samples. This counterintuitive result contradicts
+    the naive assumption that fewer samples = weaker attacker.
+    Document and report this finding — it is meaningful.
+    """
     print(f"\n{'='*60}")
     print(f"  EXPERIMENT 1: K sweep (defense=none)")
     print(f"{'='*60}")

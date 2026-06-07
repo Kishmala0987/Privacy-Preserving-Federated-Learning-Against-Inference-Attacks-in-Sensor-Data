@@ -51,6 +51,11 @@ def run(args):
     total = len(SEEDS) * len(DEFENSES)
     done  = 0
 
+        # NOTE: subject_aware_delta shows high variance across seeds
+    # (observed range: 17.8% to 35.6% attack accuracy across 3 seeds).
+    # 3 seeds is minimum. For publication, use >= 5 seeds.
+    # Variance comes from random participation in warmup not covering
+    # all subjects — fixed in fl_runner.py with min_subjects guard.
     print(f"\n{'='*55}")
     print(f"  Multi-Seed Experiment ({len(SEEDS)} seeds × {len(DEFENSES)} defenses)")
     print(f"{'='*55}\n")

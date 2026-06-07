@@ -247,13 +247,15 @@ def plot_ablation():
     ax1 = axes[0]
     for defense in DEFENSES:
         sub = df[df['defense'] == defense].sort_values('noise_value')
+        # Drop blank rows (subject_aware_delta needs rerun with fixed code)
+        sub = sub[pd.to_numeric(sub['activity_acc'], errors='coerce').notna()]
         if sub.empty:
             continue
-        ax1.plot(sub['noise_value'], sub['activity_acc'],
+        ax1.plot(sub['noise_value'], sub['activity_acc'].astype(float),
                  marker='o', color=COLORS[defense],
                  label=LABELS.get(defense, defense), linewidth=2)
 
-    ax1.set_xlabel('Noise Value', fontsize=12)
+    ax1.set_xlabel('Noise Value / Sensitive Multiplier', fontsize=12)
     ax1.set_ylabel('Activity Accuracy (%)', fontsize=12)
     ax1.set_title('Activity Accuracy vs Noise Strength', fontsize=13, fontweight='bold')
     ax1.legend(fontsize=9)
@@ -263,9 +265,10 @@ def plot_ablation():
     ax2 = axes[1]
     for defense in DEFENSES:
         sub = df[df['defense'] == defense].sort_values('noise_value')
+        sub = sub[pd.to_numeric(sub['attack_acc'], errors='coerce').notna()]
         if sub.empty:
             continue
-        ax2.plot(sub['noise_value'], sub['attack_acc'],
+        ax2.plot(sub['noise_value'], sub['attack_acc'].astype(float),
                  marker='o', color=COLORS[defense],
                  label=LABELS.get(defense, defense), linewidth=2)
 
@@ -292,7 +295,8 @@ def plot_ablation():
     ax2.grid(alpha=0.3)
 
     plt.suptitle('Ablation Study — Effect of Noise Strength\n'
-                 '(subject_aware_delta x-axis = sensitive_multiplier)',
+                 '(subject_aware_delta x-axis = sensitive_multiplier; range 1–50)\n'
+                 '(★ subject_aware_delta rows blank until re-run with fixed code)',
                  fontsize=13, fontweight='bold')
     plt.tight_layout()
     plt.savefig('plots/ablation_curves.png', dpi=150)
@@ -316,8 +320,13 @@ def plot_privacy_utility_scatter():
 
     for defense in DEFENSES:
         sub = df[df['defense'] == defense]
+        sub = sub[pd.to_numeric(sub['attack_acc'], errors='coerce').notna()]
+        sub = sub[pd.to_numeric(sub['activity_acc'], errors='coerce').notna()]
         if sub.empty:
             continue
+        sub = sub.copy()
+        sub['attack_acc'] = sub['attack_acc'].astype(float)
+        sub['activity_acc'] = sub['activity_acc'].astype(float)
         sc = ax.scatter(sub['attack_acc'], sub['activity_acc'],
                         color=COLORS[defense], s=80, alpha=0.8,
                         label=LABELS.get(defense, defense), zorder=3)

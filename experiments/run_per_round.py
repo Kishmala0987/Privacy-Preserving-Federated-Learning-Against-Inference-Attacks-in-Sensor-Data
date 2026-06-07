@@ -70,15 +70,16 @@ def run(args):
             )
 
             csv_rows.append({
-                'defense'        : defense,
-                'round'          : rnd,
-                'activity_acc'   : round(act_acc, 4),
-                'attack_acc'     : round(atk_acc, 4),
-                'attack_acc_lr'  : round(per_clf.get('lr',  0), 4),
-                'attack_acc_rf'  : round(per_clf.get('rf',  0), 4),
-                'attack_acc_mlp' : round(per_clf.get('mlp', 0), 4),
-                'alpha'          : args.alpha,
-                'seed'           : 42,
+                'defense'               : defense,
+                'round'                 : rnd,
+                'activity_acc'          : round(act_acc, 4),
+                'attack_acc'            : round(atk_acc, 4),
+                'attack_acc_lr'         : round(per_clf.get('lr',  0), 4),
+                'attack_acc_rf'         : round(per_clf.get('rf',  0), 4),
+                'attack_acc_mlp'        : round(per_clf.get('mlp', 0), 4),
+                'privacy_gain_vs_random': round(atk_acc / (100.0 / 30), 4),
+                'alpha'                 : args.alpha,
+                'seed'                  : 42,
             })
         print()
 
