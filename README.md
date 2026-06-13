@@ -32,7 +32,7 @@ The expected folder structure inside is the standard UCI-HAR layout with `train/
 
 Random guessing on 30 people = **3.3% accuracy**. Without any defense, the attack reaches ** 100%**.
 
-### The novel contribution: Subject-Aware Delta Defense
+### Subject-Aware Delta Defense
 
 Standard differential privacy adds noise uniformly to all delta dimensions. This defense first identifies *which specific weight dimensions vary most between subjects* (using between-group variance analysis during a warmup phase), then adds proportionally more noise to exactly those dimensions. This preserves the activity-classification signal while masking the identity signal.
 
@@ -109,7 +109,7 @@ python experiments/run_per_round.py --rounds 30 --track_every 2
 
 ---
 
-### 5. Ensemble FL experiments (new in Project 3)
+### 5. Ensemble FL experiments
 
 Three experiments sweeping ensemble group count K.
 
